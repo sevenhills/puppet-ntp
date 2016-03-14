@@ -1,0 +1,4 @@
+---
+ntp::servers:
+  - 'ntp1.server.com'
+  - 'ntp2.server.com'

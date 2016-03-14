@@ -1,0 +1,11 @@
+---
+:backends:
+  - yaml
+
+:hierarchy:
+  - defaults
+
+:yaml:
+  :datadir: /etc/puppet/modules/site/data
+
+:merge_behavior: deeper
