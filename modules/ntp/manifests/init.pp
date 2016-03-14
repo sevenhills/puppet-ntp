@@ -28,6 +28,7 @@
 class ntp (
     $absent                        = $ntp::params::absent,
     $version                       = $ntp::params::version,
+    $config_file_mode              = $ntp::params::config_file_mode,
     $config_file_owner             = $ntp::params::config_file_owner,
     $config_file_group             = $ntp::params::config_file_group,
     $servers                       = $ntp::params::servers,
@@ -48,6 +49,12 @@ class ntp (
         $ensure_file    = file
     }
 
+    $service = $::operatingsystem ? {
+       /(?i:Debian|Ubuntu|Mint|Solaris)/ => 'ntp',
+       /(?i:SLES|OpenSuSE)/              => 'ntp',
+       default                           => 'ntpd',
+    }
+
     package { 'ntp':
         ensure  => $ensure_pkg,
     }
@@ -62,15 +69,15 @@ class ntp (
     file { "ntp.conf":
         ensure  => $ntp::ensure_file,
         path    => "/etc/ntp/ntp.conf",
-        mode    => $ntp::config_file_mode,
+        mode    => $config_file_mode,
         owner   => $config_file_owner,
         group   => $config_file_group,
         content => template("ntp/ntp.conf.erb"),
-        notify  => Service['ntp'],
+        notify  => Service[$service],
         require => File['/etc/ntp'],
     }
 
-    service { "ntp":
+    service { "$service":
         ensure      => $ntp::ensure_svc,
         enable      => !$ntp::absent,
         hasrestart  => true,
