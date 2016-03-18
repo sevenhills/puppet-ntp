@@ -40,3 +40,6 @@ See params.pp for complete list of optional parameters.
     # The first two colons indicate top-scope, meaning ntp should be a 
     # module that lives in /etc/puppet/modules/
 
+
+###
+Testing GIT operations.
